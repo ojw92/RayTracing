@@ -55,7 +55,7 @@ public:
     }
 };
 
-// point3 is just an alias for vec3, but useful for geometric clarity in the code.
+// point3 is just an alias for vec3, but useful for geometric clarity in the code - point in space vs direction vector
 using point3 = vec3;
 
 
