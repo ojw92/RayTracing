@@ -18,6 +18,8 @@
 // Allocates pixel buffer in unified memory via cudaMallocManaged
 // Launches thousands of threads (1/pixel)
 // Practicing GPU acceleration and parallelism via thread heirarchy (grid/block/threadIdx), memory management and synchronization via cudaDeviceSynchronize()
+    // "embarrassingly parallel" problem can be divided into completely independent sub-problems that can be processed simultaneously with minimal or no communication or dependency between them.
+    // "embarrassingly" refers to how easy the parallelization is, as the task is so straightforward that it's almost "embarrassing" to need a complex parallel setup for it.
 
 // Define a device kernel that runs on the GPU and launches many threads
 __global__ void gradient_kernel(uint8_t* pixels, int width, int height) {
