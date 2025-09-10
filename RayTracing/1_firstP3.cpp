@@ -26,7 +26,7 @@ int main()
 
 	std::vector<unsigned char> image(nx * ny * 3);	// dynamic array of elements of type 'unsigned char', which is a type that can hold values in 0~255; size nx * ny * 3 
 
-	ofstream outfile("firstP3.ppm");					// open output file in text mode
+	ofstream outfile("C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/RayTracing/firstP3.ppm");					// open output file in text mode
 	outfile << "P3\n" << nx << " " << ny << "\n255\n";	// write PPM header (P3 format); P3 indicates ASCII PPM file; nx ny are w & h; 255 max color value of each channel; " " inserts a space
 	
 	int idx = 0;	// idx for image array
@@ -52,9 +52,9 @@ int main()
 		}
 	}
 
-	// Files saved at C:\Users\ohjin\OneDrive\문서\Cpp\RayTracing\out\build\x64-debug\RayTracing
-	if (stbi_write_jpg("firstP3.jpg", nx, ny, 3, image.data(), 90)) {
-		std::cout << "Wrote firstP3.jpg\n";
+	// Files saved at C:\Users\ohjin\OneDrive\문서\Cpp\RayTracing\out\build\x64-debug\RayTracing unless specified
+	if (stbi_write_jpg("C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/RayTracing\\firstP3.jpg", nx, ny, 3, image.data(), 90)) {
+		std::cout << "C:\\Users\\ohjin\\OneDrive\\문서\\Cpp\\RayTracing\\RayTracing\\Wrote firstP3.jpg\n";
 	}
 	else {
 		std::cout << "Failed to write image!\n";

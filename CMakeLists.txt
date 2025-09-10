@@ -1,6 +1,5 @@
-﻿# CMakeList.txt : Top-level CMake project file, do global configuration
-# and include sub-projects here.
-#
+﻿# CMakeList.txt : Top-level CMake project file, do global configuration and include sub-projects here
+# This is a solution-level file that defines project name and include sub-project in the project folder
 cmake_minimum_required (VERSION 3.8)
 
 # Enable Hot Reload for MSVC compilers if supported.
