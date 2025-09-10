@@ -1,4 +1,4 @@
-# Rag_Flask_Ollama Project
+# RayTracing
 
 ## Overview
 This project implements a GPU-accelerated ray tracer using CUDA alongside CPU baselines written in C++ with single-threaded and multithreaded implementations, inspired by [Ray Tracing in One Weekend][https://raytracing.github.io/books/RayTracingInOneWeekend.html] by Peter Shirley, Trevor David Black and Steve Hollasch. The goal is to explore and benchmark parallel programming, memory architecture, and high-performance computing (HPC) concepts while building a feature-rich ray tracer.
