@@ -1,6 +1,3 @@
 # ninja log v6
-3	554	7790999407397456	RayTracing/CMakeFiles/RayTracing.dir/RayTracing.cpp.obj	f056eecf2e408f1a
-13	553	7791047576078873	RayTracing/CMakeFiles/RayTracing.dir/firstP3.cpp.obj	a3168459c81dc0b6
-554	670	7791047581605057	RayTracing/RayTracing.exe	9d943249ceabdb84
-4	709	7791047316365819	RayTracing/CMakeFiles/main.dir/main.cpp.obj	bd2057f7f71fda82
-710	909	7791047323545632	RayTracing/main.exe	75111d119010d586
+4	611	7794549951292719	RayTracing/CMakeFiles/main.dir/3_main.cpp.obj	adb48f1c10512282
+612	812	7794549957379429	RayTracing/main.exe	2b76dffea7677db0

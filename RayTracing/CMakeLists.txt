@@ -38,6 +38,19 @@ add_executable(ShortP3
     color.h
 )
 
+# main executable (CPU-only rendering of RTIOW)
+add_executable(main
+    3_main.cpp
+    RayTracing.h
+    stb_image.h
+    stb_image_write.h
+    vec3.h
+    color.h
+    ray.h
+)
+
+
+
 # Try enabling CUDA
 enable_language(CUDA OPTIONAL)              # CUDA is optional if nvcc fails
 

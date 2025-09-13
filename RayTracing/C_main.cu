@@ -54,8 +54,8 @@ int main() {
     render_cpu_baseline(img_cpu_base);   // Your CPU single-threaded function
     double cpu_base_time = timer_cpu_base.toc_ms();
 
-    img_cpu_base.write_ppm("C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/RayTracing/cpu_baseline.ppm");
-    stbi_write_jpg("C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/RayTracing/cpu_baseline.jpg", W, H, 3, img_cpu_base.pixels.data(), 90);
+    img_cpu_base.write_ppm("C:/Users/ohjin/OneDrive/문서/GitHub/RayTracing/RayTracing/cpu_baseline.ppm");
+    stbi_write_jpg("C:/Users/ohjin/OneDrive/문서/GitHub/RayTracing/RayTracing/cpu_baseline.jpg", W, H, 3, img_cpu_base.pixels.data(), 90);
     std::cout << "CPU baseline execution time: " << cpu_base_time << " ms\n";
 
 
@@ -67,8 +67,8 @@ int main() {
     render_cpu_threads(img_cpu_threads);   // Your CPU multithreaded function
     double cpu_threads_time = timer_threads.toc_ms();
 
-    img_cpu_threads.write_ppm("C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/RayTracing/cpu_threads.ppm");
-    stbi_write_jpg("C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/RayTracing/cpu_threads.jpg", W, H, 3, img_cpu_threads.pixels.data(), 90);
+    img_cpu_threads.write_ppm("C:/Users/ohjin/OneDrive/문서/GitHub/RayTracing/RayTracing/cpu_threads.ppm");
+    stbi_write_jpg("C:/Users/ohjin/OneDrive/문서/GitHub/RayTracing/RayTracing/cpu_threads.jpg", W, H, 3, img_cpu_threads.pixels.data(), 90);
     std::cout << "CPU multi-threaded time: " << cpu_threads_time << " ms\n";
 
 
@@ -94,8 +94,8 @@ int main() {
 
     Image img_cuda(W, H);   // copy the unified memory into the CPU Image object and save it
     std::memcpy(img_cuda.pixels.data(), d_pixels, bytes);
-    img_cuda.write_ppm("C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/RayTracing/cuda_output.ppm");
-    stbi_write_jpg("C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/RayTracing/cuda_output.jpg", W, H, 3, d_pixels, 90);
+    img_cuda.write_ppm("C:/Users/ohjin/OneDrive/문서/GitHub/RayTracing/RayTracing/cuda_output.ppm");
+    stbi_write_jpg("C:/Users/ohjin/OneDrive/문서/GitHub/RayTracing/RayTracing/cuda_output.jpg", W, H, 3, d_pixels, 90);
 
     cudaFree(d_pixels);     // free GPU memory
 

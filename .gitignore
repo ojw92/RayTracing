@@ -1,0 +1,29 @@
+# ---- Visual Studio ----
+.vs/
+*.vcxproj*
+*.sln
+*.user
+*.filters
+
+# ---- Build directories ----
+out/
+build/
+x64/
+Debug/
+Release/
+
+# ---- Compiled binaries ----
+*.exe
+*.dll
+*.lib
+*.pdb
+*.obj
+*.o
+*.a
+
+# ---- Logs and temp ----
+*.log
+*.tmp
+
+# ---- Other ----
+*.cache

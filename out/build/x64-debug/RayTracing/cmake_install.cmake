@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/RayTracing
+# Install script for directory: C:/Users/ohjin/OneDrive/문서/GitHub/RayTracing/RayTracing
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/out/install/x64-debug")
+  set(CMAKE_INSTALL_PREFIX "C:/Users/ohjin/OneDrive/문서/GitHub/RayTracing/out/install/x64-debug")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -35,6 +35,6 @@ endif()
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "C:/Users/ohjin/OneDrive/문서/Cpp/RayTracing/out/build/x64-debug/RayTracing/install_local_manifest.txt"
+  file(WRITE "C:/Users/ohjin/OneDrive/문서/GitHub/RayTracing/out/build/x64-debug/RayTracing/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
