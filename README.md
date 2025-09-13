@@ -1,7 +1,7 @@
 # RayTracing
 
 ## Overview
-This project implements a GPU-accelerated ray tracer using CUDA alongside CPU baselines written in C++ with single-threaded and multithreaded implementations, inspired by [Ray Tracing in One Weekend][https://raytracing.github.io/books/RayTracingInOneWeekend.html] by Peter Shirley, Trevor David Black and Steve Hollasch. The goal is to explore and benchmark parallel programming, memory architecture, and high-performance computing (HPC) concepts while building a feature-rich ray tracer.
+This project implements a GPU-accelerated ray tracer using CUDA alongside CPU baselines written in C++ with single-threaded and multithreaded implementations, inspired by [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html) by Peter Shirley, Trevor David Black and Steve Hollasch. The goal is to explore and benchmark parallel programming, memory architecture, and high-performance computing (HPC) concepts while building a feature-rich ray tracer.
 
 Rendering Benchmarking Results for 8K Image
 <table>
@@ -47,11 +47,13 @@ Rendering Benchmarking Results for 8K Image
   - CPU copies via `std::memcpy` into standard image objects
 
 ## Project Contents
-- `rag_flask_ollama.ipynb`
-- `rag_flask_ollama_env.yaml`
-- `data/`
-- `.env`
+- `RayTracing/`
+- `CMakeLists.txt`
+- `CMakePresets.json`
+- `Notes.docx`
+- `test.cu`
 - `.gitignore`
+- `README.md`
 
 ## Planned Extensions
 Upcoming features to expand the ray tracer:
@@ -80,7 +82,7 @@ Upcoming features to expand the ray tracer:
    ```bash
    cmake -S . -B build
    cmake --build build --config Release
-4. Run executables (RayTracing.exe, ShortP3.exe, RayTracingCUDA.exe)
+4. Run executables (RayTracing.exe, ShortP3.exe, RayTracingCUDA.exe, main.exe)
 
 ## Contact
 If there are any questions or suggestions for improving this repository, please do not hesitate to contact me at joh78@gatech.edu.

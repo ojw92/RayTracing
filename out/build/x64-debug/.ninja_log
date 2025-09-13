@@ -1,3 +1,7 @@
 # ninja log v6
-4	611	7794549951292719	RayTracing/CMakeFiles/main.dir/3_main.cpp.obj	adb48f1c10512282
-612	812	7794549957379429	RayTracing/main.exe	2b76dffea7677db0
+16	785	7794637481177717	RayTracing/CMakeFiles/main.dir/3_main.cpp.obj	adb48f1c10512282
+786	921	7794637488850384	RayTracing/main.exe	2b76dffea7677db0
+5	618	7794639995902606	RayTracing/CMakeFiles/main.dir/3_main.cpp.obj	adb48f1c10512282
+618	725	7794640002053231	RayTracing/main.exe	2b76dffea7677db0
+4	504	7794641027177212	RayTracing/CMakeFiles/main.dir/3_main.cpp.obj	adb48f1c10512282
+504	611	7794641032164158	RayTracing/main.exe	2b76dffea7677db0
