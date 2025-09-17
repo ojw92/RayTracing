@@ -3,6 +3,10 @@
 
 #include "ray.h"
 
+/*
+This class answers the question: does a ray hit the object, and if so, where and how?
+*/
+
 // Class for information about ray-object intersection, or a "hit"
 class hit_record {
 public:				// members listed under public are accessible from anywhere, not just inside the class

@@ -31,15 +31,24 @@ double hit_sphere(const point3& center, double radius, const ray& r) {    // boo
     vec3 oc = center - r.origin();      // (C-Q); vector from camera lens (origin) to sphere center
     
     // Refer to "Notes.docx" for the a, b, c values of the quadratic formula
+    // Using b = -2d * (C-Q) = -2h, simplify the sphere-interaction code by factoring out the 4 under the sqrt
+    auto a = r.direction().length_squared();        // d * d, same as before, just more concise
+    auto h = dot(r.direction(), oc);                // d * (C-Q)
+    auto c = oc.length_squared() - radius * radius; // same as before, just more concise
+    auto discriminant = h * h - a * c;              // 4 factored out
+
+    /*
     auto a = dot(r.direction(), r.direction());     // d * d
     auto b = -2.0 * dot(r.direction(), oc);         // -2d * (C-Q)
     auto c = dot(oc, oc) - radius * radius;         // (C-Q) * (C-Q) - r^2
     auto discriminant = b * b - 4 * a * c;          // value inside sqrt in quadratic formula; if +, 2 roots & ray hits twice; if 0, 1 root & ray hits once; if -, 0 roots & ray hits 0 times;
-    
+    */
+
     if (discriminant < 0) {     // if 0 root (non-real solution), just return some negative value (to be used later)
         return -1.0;    // -1 as a sentinel value ("no hit"); sentinel value in C++ is a special, non-data value used to signal a specific condition, most commonly the termination of a loop or the end of a data sequence
     } else {
-        return (-b - std::sqrt(discriminant)) / (2.0 * a);  // if ray hits, returns t, the parameter where the ray hits
+        return (h - std::sqrt(discriminant)) / a;
+        //return (-b - std::sqrt(discriminant)) / (2.0 * a);  // if ray hits, return t, the parameter where the ray hits
     }
 }
 
