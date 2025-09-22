@@ -39,9 +39,12 @@ public:     // everything after this is accessible and can be written or read fr
                 return false;
         }
 
+        // rec is a hit_record object defined in hittable.h
         rec.t = root;           // save valid intersection 'root' in the record
         rec.p = r.at(rec.t);    // intersection point
-        rec.normal = (rec.p - center) / radius;     // outward normal
+        //rec.normal = (rec.p - center) / radius;     // unit length outward normal
+        vec3 outward_normal = (rec.p - center) / radius;    // unit length outward normal
+        rec.set_face_normal(r, outward_normal);     // check the ray & outward normal for their alignment
 
         return true;
     }
