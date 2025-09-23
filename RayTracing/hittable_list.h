@@ -83,3 +83,18 @@ public:
 // std::shared_ptr<int> x = std::make_shared<int>(5);	// 'std::make_shared<int>(5)' creates an integer (5) on the heap, but it¡¯s managed automatically, and x is a smart pointer to that integer
 // std::shared_ptr<int> y = x;							// copy x into y; means now both x and y point to the same integer
 // std::cout << *x << " " << *y << "\n";				// prints 5 5
+
+// shared_ptr<type> is a pointer to some allocated type, with reference-counting semantics
+// Every time you assign its value to another shared pointer (usually with a simple assignment), the reference count is incremented
+// As shared pointers go out of scope (like at the end of a block or function), the reference count is decremented
+// Once the count goes to zero, the object is safely deleted
+// Typically, a shared pointer is first initialized with a newly - allocated object, something like this:
+	// shared_ptr<double> double_ptr = make_shared<double>(0.37);
+	// shared_ptr<vec3>   vec3_ptr = make_shared<vec3>(1.414214, 2.718281, 1.618034);
+	// shared_ptr<sphere> sphere_ptr = make_shared<sphere>(point3(0, 0, 0), 1.0);
+// make_shared<thing>(thing_constructor_params ...) allocates a new instance of type thing, using the constructor parameters. It returns a shared_ptr<thing>
+// Since the type can be automatically deduced by the return type of make_shared<type>(...), the above lines can be more simply expressed using C++'s auto type specifier:
+	// auto double_ptr = make_shared<double>(0.37);
+	// auto vec3_ptr = make_shared<vec3>(1.414214, 2.718281, 1.618034);
+	// auto sphere_ptr = make_shared<sphere>(point3(0, 0, 0), 1.0);
+// Using shared pointers allows multiple geometries to share a common instance (ex. multiple spheres using the same color material) and facilitates memory management
