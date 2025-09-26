@@ -1,8 +1,13 @@
-#include "color.h"
-#include "ray.h"
-#include "vec3.h"
+#include "rtweekend.h"
 
-#include <iostream>
+// #include "color.h"
+// #include "ray.h"
+// #include "vec3.h"
+#include "hittable.h"
+#include "hittable_list.h"
+#include "sphere.h"
+
+// #include <iostream>
 #include <vector>       // vector, for writing pixel rgb to jpg
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -25,6 +30,7 @@ Currently, the image is all black, but if a background, a sphere, normals, etc a
 */
 
 
+/*
 // Implement math for intersecting sphere by placing a small sphere at -1 on the z-axis and then coloring red any pixel that intersects it
 double hit_sphere(const point3& center, double radius, const ray& r) {    // bool: did the ray hit the sphere or not; double: where did it hit
     // Check whether ray r intersects a sphere
@@ -37,12 +43,10 @@ double hit_sphere(const point3& center, double radius, const ray& r) {    // boo
     auto c = oc.length_squared() - radius * radius; // same as before, just more concise
     auto discriminant = h * h - a * c;              // 4 factored out
 
-    /*
-    auto a = dot(r.direction(), r.direction());     // d * d
-    auto b = -2.0 * dot(r.direction(), oc);         // -2d * (C-Q)
-    auto c = dot(oc, oc) - radius * radius;         // (C-Q) * (C-Q) - r^2
-    auto discriminant = b * b - 4 * a * c;          // value inside sqrt in quadratic formula; if +, 2 roots & ray hits twice; if 0, 1 root & ray hits once; if -, 0 roots & ray hits 0 times;
-    */
+    //auto a = dot(r.direction(), r.direction());     // d * d
+    //auto b = -2.0 * dot(r.direction(), oc);         // -2d * (C-Q)
+    //auto c = dot(oc, oc) - radius * radius;         // (C-Q) * (C-Q) - r^2
+    //auto discriminant = b * b - 4 * a * c;          // value inside sqrt in quadratic formula; if +, 2 roots & ray hits twice; if 0, 1 root & ray hits once; if -, 0 roots & ray hits 0 times;
 
     if (discriminant < 0) {     // if 0 root (non-real solution), just return some negative value (to be used later)
         return -1.0;    // -1 as a sentinel value ("no hit"); sentinel value in C++ is a special, non-data value used to signal a specific condition, most commonly the termination of a loop or the end of a data sequence
@@ -51,19 +55,29 @@ double hit_sphere(const point3& center, double radius, const ray& r) {    // boo
         //return (-b - std::sqrt(discriminant)) / (2.0 * a);  // if ray hits, return t, the parameter where the ray hits
     }
 }
+*/
 
 // Sphere surface normals seem expensive to calculate because of the sqrt, but it's better to calculate just once up front
 // Sphere normals can be made unit length by dividing by radius, avoiding the expensive sqrt
 // Here, adopt the policy that normal vectors will be of unit length
 
 
-color ray_color(const ray& r) {
+color ray_color(const ray& r, const hittable& world) {  // update to account for 'world', which is any object that implements the hittable interface; in practice, a hittable_list (a vector of objects) is passed
+    /*
     // 6.1 - Rendering surface normals on a sphere
     auto t = hit_sphere(point3(0, 0, -1), 0.5, r);       // output of hit_sphere function saved to t (-1 or value computed via quadratic formula)
     if (t > 0.0) {
         // N = unit surface normal (points from sphere center to where the ray hits on the surface)
         vec3 N = unit_vector(r.at(t) - vec3(0, 0, -1));     // r.at(t) = point of intersection between ray and sphere; sphere centered at vec3(0,0,-1)
         return 0.5 * color(N.x() + 1, N.y() + 1, N.z() + 1);// N ranges [-1,1], so +1 and *0.5 scales range to [0,1]; color() outputs the color of it, converting from floating point [0.0-1.0] to 8-bit [0-255]
+    }
+    */
+
+    hit_record rec;
+    // Key improvement: ray_color no longer knows/cares whether the scene has 1 sphere or 10,000 mixed shapes - it just queries 'world'
+    if (world.hit(r, 0, infinity, rec)) {       // ask the entire scene to find the closest intersection in the range [tmin, tmax] and fill rec (point, normal, t, etc.)
+        // If there's a hit, visualize the normal
+        return 0.5 * (rec.normal + color(1, 1, 1)); // rec.normal ranges in [-1,1], so 0.5*(normal + (1,1,1)) remaps to [0,1] for display
     }
 
     // If the ray hits a sphere at center of viewpoint (0,0,-1) with radius 0.5, it returns red RGB value of (1,0,0)
@@ -87,7 +101,6 @@ color ray_color(const ray& r) {
 int main() {
 
     // Image
-
     // Define the ideal aspect ratio and image width - image height can be calculated from these two values
     auto aspect_ratio = 16.0 / 9.0;
     int image_width = 400;
@@ -95,6 +108,11 @@ int main() {
     // Calculate the image height, and ensure that it's at least 1
     int image_height = int(image_width / aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;       // image height must be at least 1, so return 1 if smaller, else image_height
+
+    // World
+    hittable_list world;    // collection of 'hittable' objects; its 'hit' loops over all objects, keeping the closest valid hit
+    world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));      // small sphere visible at z=-1
+    world.add(make_shared<sphere>(point3(0, -100.5, 01), 100)); // big sphere used as ground plane (radius=100, top is near y=0)
 
     // Camera
         // auto tells the compiler to deduce the type of a variable from its initializer and allcate the proper amount of memory
@@ -140,7 +158,7 @@ int main() {
             ray r(camera_center, ray_direction);    // a ray class object is defined by origin of the ray (camera_center), direction of the ray (ray_direction) and a function at(t) to get a point along the ray (origin + t*direction) <- half ray if positive!
 
             // color pixel_color  ->  Declare variable 'pixel_color' of type 'color' (same as 'vec3') that holds RGB values for one pixel; this is set equal to ray_color(r), which computes the color for the ray going through this pixel, i.e., vec3/color
-            color pixel_color = ray_color(r);       // based on the ray direction, find out what color the pixel is emitting (black if no object)
+            color pixel_color = ray_color(r, world);       // based on the ray direction, find out what color the pixel is emitting (black if no object)
             // write_color(std::cout, pixel_color); // prints pixel RGB values on screen
             
             // Scale RGB values back to [0,255] from [0.0-1.0] to write into file

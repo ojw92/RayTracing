@@ -3,7 +3,7 @@
 
 #include "vec3.h"
 
-#include <iostream>
+// #include <iostream>      // assume rtweekend.h inclusion
 
 /*
 Defines color as an alias for vec3 and provides a write_color function that converts a floating-point RGB color (0.0–1.0)

@@ -1,8 +1,8 @@
 #ifndef VEC3_H
 #define VEC3_H
 
-#include <cmath>
-#include <iostream>
+// #include <cmath>         // assume rtweekend.h inclusion
+// #include <iostream>      // assume rtweekend.h inclusion
 
 /*
 vec3 class represents a 3D vector, with constructors, element access, arithmetic operators, and functions to compute length and squared length.

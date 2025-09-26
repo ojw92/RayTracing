@@ -1,7 +1,7 @@
 #ifndef HITTABLE_H		// if HITTABLE_H is not defined yet, define it and include the file; otherwise, skip it; prevents the file from being included multiple times in the same translation unit
 #define HITTABLE_H
 
-#include "ray.h"
+// #include "ray.h"      // assume rtweekend.h inclusion
 
 /*
 This class answers the question: does a ray hit the object, and if so, where and how?

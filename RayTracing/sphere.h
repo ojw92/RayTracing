@@ -2,7 +2,7 @@
 #define SPHERE_H
 
 #include "hittable.h"
-#include "vec3.h"
+// #include "vec3.h"      // assume rtweekend.h inclusion
 
 /*
 This class describes one specific object - a sphere - that provides the info about the ray hitting it on the surface

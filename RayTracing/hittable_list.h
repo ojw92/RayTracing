@@ -3,7 +3,7 @@
 
 #include "hittable.h"
 
-#include <memory>		// standard header for smart pointers like std::shared_ptr
+// #include <memory>		// standard header for smart pointers like std::shared_ptr      // assume rtweekend.h inclusion
 #include <vector>
 
 /*
@@ -15,8 +15,9 @@ i.e., the whole world is a 'hittable_list' consisting of multiple 'hittable' 'ob
 */
 
 
-using std::make_shared;	// function to create 'shared_ptr' objects
-using std::shared_ptr;	// reference-counted smart pointer that shares ownership of an object
+// assume rtweekend.h inclusion
+// using std::make_shared;	// function to create 'shared_ptr' objects
+// using std::shared_ptr;	// reference-counted smart pointer that shares ownership of an object
 
 class hittable_list : public hittable {
 public:
