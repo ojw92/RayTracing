@@ -42,7 +42,7 @@ public:
 
 	// Define a virtual function that returns a boolean;
 	// putting const at the end of a member function (hit() in this case) does not modify the object's data members; only reading properties, not changing them
-	virtual bool hit(const ray& r, double ray_tmin, double ray_tmax, hit_record& rec) const = 0;	// =0 makes it a pure virtual function
+	virtual bool hit(const ray& r, interval ray_t, hit_record& rec) const = 0;	// =0 makes it a pure virtual function
 };
 
 #endif

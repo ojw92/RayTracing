@@ -33,13 +33,13 @@ public:
 		objects.push_back(object);
 	}
 
-	bool hit(const ray& r, double ray_tmin, double ray_tmax, hit_record& rec) const override {
+	bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
 		hit_record temp_rec;	// temporary record to hold a candidate object¡¯s hit info before deciding if it¡¯s the closest
 		bool hit_anything = false;
-		auto closest_so_far = ray_tmax;	// auto = deduce type as double type
+		auto closest_so_far = ray_t.max;	// auto = deduce type as double type
 
 		for (const auto& object : objects) {	// read-only reference to each shared_ptr<hittable> 'object' inside 'objects'
-			if (object->hit(r, ray_tmin, closest_so_far, temp_rec)) {	// call the polymorphic 'hit' on the actual object (sphere, etc)
+			if (object->hit(r, interval(ray_t.min, closest_so_far), temp_rec)) {	// call the polymorphic 'hit' on the actual object (sphere, etc)
 				hit_anything = true;			// mark that we have at least one hit
 				closest_so_far = temp_rec.t;	// update the best t so far
 				rec = temp_rec;					// update to closest hit details
