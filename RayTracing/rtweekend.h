@@ -2,7 +2,8 @@
 #define RTWEEKEND_H
 
 #include <cmath>        // math functions
-#include <cstdlib>      // random
+//#include <cstdlib>    // outdated random
+#include <random>       // modern random
 #include <iostream>
 #include <limits>       // type limits
 #include <memory>       // smart pointers
@@ -34,12 +35,15 @@ inline double degrees_to_radians(double degrees) {
 inline double random_double() {
     // Returns a random real in [0,1)
     // std::rand() returns a random integer between 0 and RAND_MAX, where RAND_MAX is an integer constant in cstdlib that represents max value that rand() can return
-    return std::rand() / (RAND_MAX + 1.0);
+    // Lower quality, outdated random for simulations; uses the same seed across runs unless manually using std::srand(seed)
+    // return std::rand() / (RAND_MAX + 1.0);
 
-    // Alternate implementation
-    //static std::uniform_real_distribution<double> distribution(0.0, 1.0);
-    //static std::mt19937 generator;
-    //return distribution(generator);
+    // Alternate implementation of random using Mersenne Twister (std::mt19937)
+    // static means the generator and distribution are intialized only once and reused every time the function is invoked -> efficient
+    static std::uniform_real_distribution<double> distribution(0.0, 1.0);   // true uniformity between 0.0 and 1.0
+    static std::mt19937 generator;
+    return distribution(generator);
+        // seed the generator to get unique results each run using this  ->  static std::mt19937 generator(std::random_device{}());
 }
 
 inline double random_double(double min, double max) {
