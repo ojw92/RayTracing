@@ -2,6 +2,7 @@
 #define RTWEEKEND_H
 
 #include <cmath>        // math functions
+#include <cstdlib>      // random
 #include <iostream>
 #include <limits>       // type limits
 #include <memory>       // smart pointers
@@ -28,6 +29,22 @@ const double pi = 3.1415926535897932385;        // modern C++ option: inline con
 // Utility Functions
 inline double degrees_to_radians(double degrees) {
     return degrees * pi / 180.0;
+}
+
+inline double random_double() {
+    // Returns a random real in [0,1)
+    // std::rand() returns a random integer between 0 and RAND_MAX, where RAND_MAX is an integer constant in cstdlib that represents max value that rand() can return
+    return std::rand() / (RAND_MAX + 1.0);
+
+    // Alternate implementation
+    //static std::uniform_real_distribution<double> distribution(0.0, 1.0);
+    //static std::mt19937 generator;
+    //return distribution(generator);
+}
+
+inline double random_double(double min, double max) {
+    // Returns a random real in [min, max)
+    return min + (max - min) * random_double();
 }
 
 // Common Headers - includes project headers that depend on the utilities above
