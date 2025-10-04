@@ -36,6 +36,7 @@ Rendering Benchmarking Results for 8K Image
   - CPU single-threaded baseline
   - CPU multithreaded version using `std::thread`
   - GPU-accelerated version using CUDA kernels
+  - Anti-aliasing
 - **Benchmarking framework**
   - Execution time measurements with a custom `Timer`
   - Comparisons across CPU baseline, multithreaded, and GPU executions
