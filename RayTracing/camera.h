@@ -8,8 +8,9 @@
 
 class camera {
 public:
-    double aspect_ratio = 1.0;  // ratio of image width over height
-    int    image_width = 100;   // rendered image width in pixel count
+    double aspect_ratio = 1.0;       // ratio of image width over height
+    int    image_width = 100;        // rendered image width in pixel count
+    int    samples_per_pixel = 10;   // count of random samples for each pixel
 
     // Render
     void render(const hittable& world) {
@@ -26,6 +27,7 @@ public:
         for (int j = 0; j < image_height; j++) {
             std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
             for (int i = 0; i < image_width; i++) {
+                /*
                 auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);    // coordinates of each (i,j)-th pixel's center
                 auto ray_direction = pixel_center - center;      // ray direction from camera to pixel center, but not unit vector for code simplicity
                 ray r(center, ray_direction);    // a ray class object is defined by origin of the ray (camera_center), direction of the ray (ray_direction) and a function at(t) to get a point along the ray (origin + t*direction) <- half ray if positive!
@@ -33,6 +35,13 @@ public:
                 // color pixel_color  ->  Declare variable 'pixel_color' of type 'color' (same as 'vec3') that holds RGB values for one pixel; this is set equal to ray_color(r), which computes the color for the ray going through this pixel, i.e., vec3/color
                 color pixel_color = ray_color(r, world);       // based on the ray direction, find out what color the pixel is emitting (black if no object)
                 // write_color(std::cout, pixel_color); // prints pixel RGB values on screen
+                */
+                color pixel_color(0, 0, 0);
+                for (int sample = 0; sample < samples_per_pixel; sample++) {
+                    ray r = get_ray(i, j);
+                    pixel_color += ray_color(r, world);
+                }
+                write_color(std::cout, pixel_samples_scale * pixel_color);
 
                 // Scale RGB values back to [0,255] from [0.0-1.0] to write into file
                 int ir = static_cast<int>(255.999 * pixel_color.x());
@@ -57,16 +66,19 @@ public:
 
 private:
     // Declare members (fields of every camera object) - variables belonging to class object
-    int    image_height;   // rendered image height
-    point3 center;         // camera center
-    point3 pixel00_loc;    // location of pixel 0, 0
-    vec3   pixel_delta_u;  // offset to pixel to the right
-    vec3   pixel_delta_v;  // offset to pixel below
+    int    image_height;         // rendered image height
+    double pixel_samples_scale;  // color scale factor for a sum of pixel samples
+    point3 center;               // camera center
+    point3 pixel00_loc;          // location of pixel 0, 0
+    vec3   pixel_delta_u;        // offset to pixel to the right
+    vec3   pixel_delta_v;        // offset to pixel below
 
     void initialize() {
         // Calculate the image height, and ensure that it's at least 1
         image_height = int(image_width / aspect_ratio);
         image_height = (image_height < 1) ? 1 : image_height;       // image height must be at least 1, so return 1 if smaller, else image_height
+
+        pixel_samples_scale = 1.0 / samples_per_pixel;
 
         center = point3(0, 0, 0);
 
@@ -93,6 +105,26 @@ private:
             - viewport_u / 2            // shift left by half viewport width to reach the left edge of the viewport
             - viewport_v / 2;           // shift up (since v is down) by half viewport height to reach the top edge of the viewport
         pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);     // from upper left corner, move to the center of the top-left pixel (0,0)
+    }
+
+    ray get_ray(int i, int j) const {
+        // Construct a camera ray originating from the origin and directed at randomly sampled
+        // point around the pixel location i, j.
+
+        auto offset = sample_square();
+        auto pixel_sample = pixel00_loc
+            + ((i + offset.x()) * pixel_delta_u)
+            + ((j + offset.y()) * pixel_delta_v);
+
+        auto ray_origin = center;
+        auto ray_direction = pixel_sample - ray_origin;
+
+        return ray(ray_origin, ray_direction);
+    }
+
+    vec3 sample_square() const {
+        // Returns the vector to a random point in the [-.5,-.5]-[+.5,+.5] unit square.
+        return vec3(random_double() - 0.5, random_double() - 0.5, 0);
     }
 
     // Key improvement: ray_color no longer knows/cares whether the scene has 1 sphere or 10,000 mixed shapes - it just queries 'world'
