@@ -10,7 +10,7 @@ class camera {
 public:
     double aspect_ratio = 1.0;       // ratio of image width over height
     int    image_width = 100;        // rendered image width in pixel count
-    int    samples_per_pixel = 10;   // count of random samples for each pixel
+    int    samples_per_pixel = 10;   // count of random samples for each pixel; default value and can be overridden in 3_main.cpp
 
     // Render
     void render(const hittable& world) {
@@ -129,6 +129,12 @@ private:
     vec3 sample_square() const {
         // Returns the vector to a random point in the [-.5,-.5]-[+.5,+.5] unit square.
         return vec3(random_double() - 0.5, random_double() - 0.5, 0);
+    }
+
+    // Generating sample point within non-square pixel
+    vec3 sample_disk(double radius) const {
+        // Returns a random point in hte unit (radius 0.5) disk centered at the origin
+        //return radius * random_in_unit_disk()
     }
 
     // Key improvement: ray_color no longer knows/cares whether the scene has 1 sphere or 10,000 mixed shapes - it just queries 'world'

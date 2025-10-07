@@ -26,7 +26,7 @@ public:
     double clamp(double x) const {
         if (x < min) return min;
         if (x > max) return max;
-        return x
+        return x;
     }
 
     static const interval empty, universe;  // class-level constants shared by all instances of 'interval' class object; 'global constant'
