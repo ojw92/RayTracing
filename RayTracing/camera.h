@@ -37,11 +37,12 @@ public:
                 // write_color(std::cout, pixel_color); // prints pixel RGB values on screen
                 */
                 color pixel_color(0, 0, 0);
+                // Shoot n=sample rays per pixel, accumulating the total color across all samples to 'pixel_color'
                 for (int sample = 0; sample < samples_per_pixel; sample++) {
                     ray r = get_ray(i, j);
                     pixel_color += ray_color(r, world);
                 }
-                write_color(std::cout, pixel_samples_scale * pixel_color);
+                write_color(std::cout, pixel_samples_scale * pixel_color);  // averaged color
 
                 // Scale RGB values back to [0,255] from [0.0-1.0] to write into file
                 int ir = static_cast<int>(255.999 * pixel_color.x());
@@ -107,21 +108,24 @@ private:
         pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);     // from upper left corner, move to the center of the top-left pixel (0,0)
     }
 
-    ray get_ray(int i, int j) const {
+    ray get_ray(int i, int j) const {   // generates different samples for each pixel
         // Construct a camera ray originating from the origin and directed at randomly sampled
         // point around the pixel location i, j.
 
         auto offset = sample_square();
-        auto pixel_sample = pixel00_loc
-            + ((i + offset.x()) * pixel_delta_u)
-            + ((j + offset.y()) * pixel_delta_v);
+        // Construct 3D position of sampled point inside pixel (i, j)
+        auto pixel_sample = pixel00_loc             // top left corner (0,0)
+            + ((i + offset.x()) * pixel_delta_u)    // how far to go right * 3D offset to move right by one pixel
+            + ((j + offset.y()) * pixel_delta_v);   // how far to go down  * 3D offset to move down  by one pixel
 
         auto ray_origin = center;
         auto ray_direction = pixel_sample - ray_origin;
 
-        return ray(ray_origin, ray_direction);
+        return ray(ray_origin, ray_direction);      // return a 'ray' object that starts at the camera and goes toward the pixel sample
     }
 
+    // Generate a random sample point within the unit square centered at the origin, with random 2D offset of [-0.5, +0.5]
+    // By "jittering the ray" within the pixel instead of at the center, we can take average of multiple slightly-different samples per pixel, achieving anti-aliasing by blurring out sharp sampling edges
     vec3 sample_square() const {
         // Returns the vector to a random point in the [-.5,-.5]-[+.5,+.5] unit square.
         return vec3(random_double() - 0.5, random_double() - 0.5, 0);
