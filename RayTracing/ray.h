@@ -11,7 +11,7 @@ public:             // visible to anyone who uses this class
     ray(const point3& origin, const vec3& direction) : orig(origin), dir(direction) {}      // point3 is alias of vec3
 
     // Define getter functions - "const ... const" returns a const reference (can¡¯t modify the internals via this return)
-    const point3& origin() const { return orig; }   // starting point of ray
+    const point3& origin()  const { return orig; }   // starting point of ray
     const vec3& direction() const { return dir; }   // direction vector of ray
 
         // 'const point3&' means the function returns a reference to the internal member, but the reference is read-only and immutable

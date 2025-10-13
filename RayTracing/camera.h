@@ -8,8 +8,8 @@
 
 class camera {
 public:
-    double aspect_ratio = 1.0;       // ratio of image width over height
-    int    image_width = 100;        // rendered image width in pixel count
+    double aspect_ratio      = 1.0;       // ratio of image width over height
+    int    image_width       = 100;        // rendered image width in pixel count
     int    samples_per_pixel = 10;   // count of random samples for each pixel; default value and can be overridden in 3_main.cpp
 
     // Render
@@ -45,9 +45,9 @@ public:
                 write_color(std::cout, pixel_samples_scale * pixel_color);  // averaged color
 
                 // Scale RGB values back to [0,255] from [0.0-1.0] to write into file
-                int ir = static_cast<int>(255.999 * pixel_color.x());
-                int ig = static_cast<int>(255.999 * pixel_color.y());
-                int ib = static_cast<int>(255.999 * pixel_color.z());
+                int ir = static_cast<int>(255.999 * pixel_samples_scale * pixel_color.x());     // need to scale pixel_color via pixel_sample_scale
+                int ig = static_cast<int>(255.999 * pixel_samples_scale * pixel_color.y());
+                int ib = static_cast<int>(255.999 * pixel_samples_scale * pixel_color.z());
 
                 int index = (j * image_width + i) * 3;
                 image[index + 0] = static_cast<unsigned char>(ir);
@@ -134,7 +134,7 @@ private:
     // Generating sample point within non-square pixel
     vec3 sample_disk(double radius) const {
         // Returns a random point in hte unit (radius 0.5) disk centered at the origin
-        //return radius * random_in_unit_disk()
+        //return radius * random_in_unit_disk();
     }
 
     // Key improvement: ray_color no longer knows/cares whether the scene has 1 sphere or 10,000 mixed shapes - it just queries 'world'
@@ -151,8 +151,11 @@ private:
         hit_record rec;
 
         if (world.hit(r, interval(0, infinity), rec)) {     // ask the entire scene to find the closest intersection in the range [tmin, tmax] and fill rec (point, normal, t, etc.)
+            vec3 direction = random_on_hemisphere(rec.normal);
+            // If a ray bounces off of a material and keeps 100% of its color, then we say that the material is white; for 0% it's black
+            return 0.5 * ray_color(ray(rec.p, direction), world);   // 50% color is returned from the bounce for gray rendering
             // If there's a hit, visualize the normal
-            return 0.5 * (rec.normal + color(1, 1, 1));     // rec.normal ranges in [-1,1], so 0.5*(normal + (1,1,1)) remaps to [0,1] for display
+            //return 0.5 * (rec.normal + color(1, 1, 1));     // rec.normal ranges in [-1,1], so 0.5*(normal + (1,1,1)) remaps to [0,1] for display
         }
         // If the ray hits a sphere at center of viewpoint (0,0,-1) with radius 0.5, it returns red RGB value of (1,0,0)
         //if (hit_sphere(point3(0, 0, -1), 0.5, r))

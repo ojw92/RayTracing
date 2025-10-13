@@ -66,7 +66,7 @@ int main() {
     hittable_list world;    // collection of 'hittable' objects; its 'hit' loops over all objects, keeping the closest valid hit
 
     world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));      // small sphere visible at z=-1
-    world.add(make_shared<sphere>(point3(0, -100.5, 01), 100)); // big sphere used as ground plane (radius=100, top is near y=0)
+    world.add(make_shared<sphere>(point3(0, -100.5, -1), 100)); // big sphere used as ground plane (radius=100, top is near y=0)
 
     // Camera
     camera cam;

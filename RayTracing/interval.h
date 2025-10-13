@@ -34,7 +34,7 @@ public:
         // not like self.x because that's for per-object members
 };
 
-const interval interval::empty = interval(+infinity, -infinity);
+const interval interval::empty    = interval(+infinity, -infinity);
 const interval interval::universe = interval(-infinity, +infinity);
 
 
