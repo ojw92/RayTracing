@@ -113,4 +113,16 @@ inline vec3 unit_vector(const vec3& v) {
     return v / v.length();
 }
 
+inline vec3 random_unit_vector() {          // create a random vector inside unit sphere and make it a unit vector
+    // floating-point abstraction leak: finite precision of floats can cause very small value to underflow to zero when squared
+    // if x, y, z are near center of sphere, norm of the vector will be zero and normalizing will create the bogus vector [¡¾¡Ä,¡¾¡Ä,¡¾¡Ä]
+    // so we must also reject points that lie inside this ¡°black hole¡± around the center -> hence, we add 1e-160 < lensq part
+    while (true) {
+        auto p = vec3::random(-1, 1);
+        auto lensq = p.length_squared();
+        if (1e-160 < lensq && lensq <= 1)
+            return p / sqrt(lensq);
+    }
+}
+
 #endif
