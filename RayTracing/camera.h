@@ -8,9 +8,10 @@
 
 class camera {
 public:
-    double aspect_ratio      = 1.0;       // ratio of image width over height
-    int    image_width       = 100;        // rendered image width in pixel count
-    int    samples_per_pixel = 10;   // count of random samples for each pixel; default value and can be overridden in 3_main.cpp
+    double aspect_ratio      = 1.0;     // ratio of image width over height
+    int    image_width       = 100;     // rendered image width in pixel count
+    int    samples_per_pixel = 10;      // count of random samples for each pixel; default value and can be overridden in 3_main.cpp
+    int    max_depth         = 10;      // max number of ray bounces into scene  
 
     // Render
     void render(const hittable& world) {
@@ -40,7 +41,7 @@ public:
                 // Shoot n=sample rays per pixel, accumulating the total color across all samples to 'pixel_color'
                 for (int sample = 0; sample < samples_per_pixel; sample++) {
                     ray r = get_ray(i, j);
-                    pixel_color += ray_color(r, world);
+                    pixel_color += ray_color(r, max_depth, world);
                 }
                 write_color(std::cout, pixel_samples_scale * pixel_color);  // averaged color
 
@@ -138,7 +139,8 @@ private:
     }
 
     // Key improvement: ray_color no longer knows/cares whether the scene has 1 sphere or 10,000 mixed shapes - it just queries 'world'
-    color ray_color(const ray& r, const hittable& world) const {    // update to account for 'world', which is any object that implements the hittable interface; in practice, a hittable_list (a vector of objects) is passed
+    // 9.2 Depth Limiting: ray_color() is recursive - set a max_depth to stop recursion when the ray does not hit anything
+    color ray_color(const ray& r, int depth, const hittable& world) const {    // update to account for 'world', which is any object that implements the hittable interface; in practice, a hittable_list (a vector of objects) is passed
         /*
         // 6.1 - Rendering surface normals on a sphere
         auto t = hit_sphere(point3(0, 0, -1), 0.5, r);       // output of hit_sphere function saved to t (-1 or value computed via quadratic formula)
@@ -148,12 +150,16 @@ private:
             return 0.5 * color(N.x() + 1, N.y() + 1, N.z() + 1);// N ranges [-1,1], so +1 and *0.5 scales range to [0,1]; color() outputs the color of it, converting from floating point [0.0-1.0] to 8-bit [0-255]
         }
         */
+        // 9.2 If the ray bounce limit is exceeded, no more light is gathered
+        if (depth <= 0)
+            return color(0, 0, 0);
+
         hit_record rec;
 
         if (world.hit(r, interval(0, infinity), rec)) {     // ask the entire scene to find the closest intersection in the range [tmin, tmax] and fill rec (point, normal, t, etc.)
             vec3 direction = random_on_hemisphere(rec.normal);
             // If a ray bounces off of a material and keeps 100% of its color, then we say that the material is white; for 0% it's black
-            return 0.5 * ray_color(ray(rec.p, direction), world);   // 50% color is returned from the bounce for gray rendering
+            return 0.5 * ray_color(ray(rec.p, direction), depth-1, world);   // 50% color is returned from the bounce for gray rendering
             // If there's a hit, visualize the normal
             //return 0.5 * (rec.normal + color(1, 1, 1));     // rec.normal ranges in [-1,1], so 0.5*(normal + (1,1,1)) remaps to [0,1] for display
         }
