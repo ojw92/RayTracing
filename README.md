@@ -60,7 +60,7 @@ Rendering Benchmarking Results for 8K Image
 ## Planned Extensions
 Upcoming features to expand the ray tracer:
 - Sphere intersection  
-- Camera implementation  
+- Positionable camera implementation  
 - Diffuse and specular materials  
 - Reflection and refraction  
 - Metal and dielectric surfaces  
