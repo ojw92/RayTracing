@@ -43,12 +43,13 @@ public:
                     ray r = get_ray(i, j);
                     pixel_color += ray_color(r, max_depth, world);
                 }
-                write_color(std::cout, pixel_samples_scale * pixel_color);  // averaged color
+                pixel_color = pixel_samples_scale * pixel_color;    // averaged accumulated color values from samples of the pixel; scale pixel_color by pixel_sample_scale
+                write_color(std::cout, pixel_color);                // prints out averaged color
 
                 // Scale RGB values back to [0,255] from [0.0-1.0] to write into file
-                int ir = static_cast<int>(255.999 * pixel_samples_scale * pixel_color.x());     // need to scale pixel_color via pixel_sample_scale
-                int ig = static_cast<int>(255.999 * pixel_samples_scale * pixel_color.y());
-                int ib = static_cast<int>(255.999 * pixel_samples_scale * pixel_color.z());
+                int ir = static_cast<int>(255.999 * linear_to_gamma(pixel_color.x()));  // need gamma correction for each RGB value being written
+                int ig = static_cast<int>(255.999 * linear_to_gamma(pixel_color.y()));
+                int ib = static_cast<int>(255.999 * linear_to_gamma(pixel_color.z()));
 
                 int index = (j * image_width + i) * 3;
                 image[index + 0] = static_cast<unsigned char>(ir);
@@ -160,8 +161,7 @@ private:
             vec3 direction = rec.normal + random_unit_vector();     // implement true Lambertian reflection     // replicate diffuse material via random_on_hemisphere(rec.normal);
             // If a ray bounces off of a material and keeps 100% of its color, then we say that the material is white; for 0% it's black
             return 0.5 * ray_color(ray(rec.p, direction), depth-1, world);   // 50% color is returned from the bounce for gray rendering
-            // If there's a hit, visualize the normal
-            //return 0.5 * (rec.normal + color(1, 1, 1));     // rec.normal ranges in [-1,1], so 0.5*(normal + (1,1,1)) remaps to [0,1] for display
+            //return 0.5 * (rec.normal + color(1, 1, 1));   // visualize the normal if there's a hit; rec.normal ranges in [-1,1], so 0.5*(normal + (1,1,1)) remaps to [0,1] for display
         }
         // If the ray hits a sphere at center of viewpoint (0,0,-1) with radius 0.5, it returns red RGB value of (1,0,0)
         //if (hit_sphere(point3(0, 0, -1), 0.5, r))

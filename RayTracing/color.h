@@ -14,11 +14,24 @@ into 8-bit values (0–255) and writes them to an output stream in text form, su
 using color = vec3;         // color is an alias (nickname) for vec3 class; vec3 is a 3D vector storing 3 doubles, .x(), .y(), .z()
     // color c(1.0, 0.0, 0.0) is the same as vec3 c(1.0, 0.0, 0.0)
 
+inline double linear_to_gamma(double linear_component)
+{
+    if (linear_component > 0)
+        return std::sqrt(linear_component);
+
+    return 0;
+}
+
 void write_color(std::ostream& out, const color& pixel_color) {     // void is the function return type - returns nothing
     // The .x(), .y(), .z() of the vec3 class are interpreted as r, g and b
     auto r = pixel_color.x();
     auto g = pixel_color.y();
     auto b = pixel_color.z();
+
+    // Apply a linear to gamma transform for gamma 2 (γ = 2)
+    r = linear_to_gamma(r);
+    g = linear_to_gamma(g);
+    b = linear_to_gamma(b);
 
     // Translate the [0,1] component values to the byte range [0,255]
     static const interval intensity(0.000, 0.999);
