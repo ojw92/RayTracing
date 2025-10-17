@@ -156,8 +156,8 @@ private:
 
         hit_record rec;
 
-        if (world.hit(r, interval(0, infinity), rec)) {     // ask the entire scene to find the closest intersection in the range [tmin, tmax] and fill rec (point, normal, t, etc.)
-            vec3 direction = random_on_hemisphere(rec.normal);
+        if (world.hit(r, interval(0.001, infinity), rec)) {     // ask the entire scene to find the closest intersection in the range [tmin, tmax] and fill rec (point, normal, t, etc.)
+            vec3 direction = rec.normal + random_unit_vector();     // implement true Lambertian reflection     // replicate diffuse material via random_on_hemisphere(rec.normal);
             // If a ray bounces off of a material and keeps 100% of its color, then we say that the material is white; for 0% it's black
             return 0.5 * ray_color(ray(rec.p, direction), depth-1, world);   // 50% color is returned from the bounce for gray rendering
             // If there's a hit, visualize the normal
