@@ -11,7 +11,9 @@ This class describes one specific object - a sphere - that provides the info abo
 // Declare class sphere
 class sphere : public hittable {    // 'sphere' class inherits from 'hittable' class ("things rays can hit"); done publicly, so outside code can treat 'sphere' as 'hittable'
 public:     // everything after this is accessible and can be written or read from outside the class
-    sphere(const point3& center, double radius) : center(center), radius(std::fmax(0, radius)) {}   // ensure radius >= 0; std::fmax() returns maximum of two floats
+    sphere(const point3& center, double radius) : center(center), radius(std::fmax(0, radius)) {    // ensure radius >= 0; std::fmax() returns maximum of two floats
+        //TODO: initialize the material pointer 'mat'
+    }
         // sphere is constructor function that takes in 3D point for center and floating-point for radius
         // center(center) initializes member variable 'center' with constructor's parameter 'center'
         // radius(std::fmax(0, radius)) initializes the member variable 'radius' with either the provided radius or 0
@@ -45,6 +47,7 @@ public:     // everything after this is accessible and can be written or read fr
         //rec.normal = (rec.p - center) / radius;     // unit length outward normal
         vec3 outward_normal = (rec.p - center) / radius;    // unit length outward normal
         rec.set_face_normal(r, outward_normal);     // check the ray & outward normal for their alignment
+        rec.mat = mat;
 
         return true;
     }
@@ -52,6 +55,7 @@ public:     // everything after this is accessible and can be written or read fr
 private:            // data below can only accessed inside class
     point3 center;
     double radius;
+    shared_ptr<material> mat;
 };
 
 #endif

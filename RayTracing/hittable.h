@@ -3,16 +3,15 @@
 
 // #include "ray.h"      // assume rtweekend.h inclusion
 
-/*
-This class answers the question: does a ray hit the object, and if so, where and how?
-*/
+class material;
 
-// Class for information about ray-object intersection, or a "hit"
+// Class for information about ray-object intersection, or a "hit": does a ray hit the object, and if so, where and how?
 class hit_record {
-public:				// members listed under public are accessible from anywhere, not just inside the class
-	point3 p;		// 3D coordinate of the hit point (point3 is type alias for vec3)
-	vec3 normal;	// surface normal vector at that point (for shading)
-	double t;		// ray parameter t at the hit (r.at(t) = p); tells how far along the ray the intersection has occurred; floating-point (64-bit)
+public:					// members listed under public are accessible from anywhere, not just inside the class
+	point3 p;			// 3D coordinate of the hit point (point3 is type alias for vec3)
+	vec3 normal;		// surface normal vector at that point (for shading)
+	shared_ptr<material> mat;	// since we're just specifying a pointer to the class, the compiler doesn't need to know the details of the class
+	double t;			// ray parameter t at the hit (r.at(t) = p); tells how far along the ray the intersection has occurred; floating-point (64-bit)
 	bool front_face;	// false if dot(ray_direction, outward_normal) > 0.0, i.e., ray is inside the sphere; true if dot(ray_direction, outward_normal) <= 0.0, i.e., ray is outside the sphere; dot product can be 0 if the ray is tangent to sphere, i.e., outside the sphere and/or inside the sphere; so = sign can be used for either case
 
 	void set_face_normal(const ray& r, const vec3& outward_normal) {
