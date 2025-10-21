@@ -19,4 +19,26 @@ public:
 	}
 };
 
+class lambertian : public material {
+public:
+	lambertian(const color& albedo) : albedo(albedo) {}	
+		// const color& albedo: take albedo by const reference (no copy, not mutated)
+		// albedo(albedo): initializes the data member albedo with the parameter albedo
+
+	bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered)	// scatter() is a method that decides how an incoming ray bounces
+			// color& attenuation: output parameter; multiply the ray¡¯s color by this (the material¡¯s albedo)
+			// ray& scattered: output parameter; the new scattered ray to trace next
+		const override {	// const: this method does not modify the lambertian object itself; override: tells the compiler this function overrides material::scatter (checks the signature)
+		// Returns true if the material produces a scattered ray, false if absorbed
+		auto scatter_direction = rec.normal + random_unit_vector();	// the direction we'll shoot the scattered ray
+			// adding the random_unit_vector() to the normal ¡æ picks a random direction in the hemisphere around the normal (Lambertian diffuse)
+		scattered = ray(rec.p, scatter_direction);	// sets the output ray, which has origin at the hit point and direction as the sampled diffuse direction
+		attenuation = albedo;	// set the output color multiplier as albedo, the material's reflectance color - how much of incoming light is kept per channel; pure red diffuse would be (1, 0, 0), and gray as (0.5, 0.5, 0.5)
+		return true;
+	}
+
+private:	// only the class¡¯s own methods can access these members
+	color albedo;
+};
+
 #endif
