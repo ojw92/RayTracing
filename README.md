@@ -37,7 +37,7 @@ Rendering Benchmarking Results for 8K Image
   - CPU multithreaded version using `std::thread`
   - GPU-accelerated version using CUDA kernels
   - Anti-aliasing
-  - Diffuse materials
+  - Diffuse materials and metals
 - **Benchmarking framework**
   - Execution time measurements with a custom `Timer`
   - Comparisons across CPU baseline, multithreaded, and GPU executions
@@ -67,7 +67,7 @@ Upcoming features to expand the ray tracer:
 - Defocus blur (depth of field)  
 - Motion blur  
 - Texture mapping  
-- Perlin noise  
+- Perlin noise
 - Rectangles, boxes, and volumes  
 - Transformations and instancing  
 - Bounding volume hierarchies (BVH)  
