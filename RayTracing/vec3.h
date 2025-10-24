@@ -56,6 +56,7 @@ public:
 
     bool near_zero() const {
         // Return true if the vector is close to zero in all dimensions
+        // Floating point math rarely creates exact zeroes and scatter directions like normal + random_unit_vector() can be extremely small (near zero), which can cause artifacts
         auto s = 1e-8;
         return (std::fabs(e[0]) < s) && (std::fabs(e[1]) < s) && (std::fabs(e[2]) < s);
     }
