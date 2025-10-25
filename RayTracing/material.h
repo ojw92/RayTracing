@@ -32,6 +32,12 @@ public:
 		// Returns true if the material produces a scattered ray, false if absorbed
 		auto scatter_direction = rec.normal + random_unit_vector();	// the direction we'll shoot the scattered ray
 			// adding the random_unit_vector() to the normal ¡æ picks a random direction in the hemisphere around the normal (Lambertian diffuse)
+			// if the random unit vector is exact opposite of the normal vector, sum will be 0, resulting in zero scatter direction vector; vec3::near_zero() will handle this to return true if vector is very close to 0 in all dimensions
+		
+		// Catch degenerate scatter direction
+		if (scatter_direction.near_zero())
+			scatter_direction = rec.normal;
+		
 		scattered = ray(rec.p, scatter_direction);	// sets the output ray, which has origin at the hit point and direction as the sampled diffuse direction
 		attenuation = albedo;	// set the output color multiplier as albedo, the material's reflectance color - how much of incoming light is kept per channel; pure red diffuse would be (1, 0, 0), and gray as (0.5, 0.5, 0.5)
 		return true;
