@@ -11,7 +11,7 @@ This class describes one specific object - a sphere - that provides the info abo
 // Declare class sphere
 class sphere : public hittable {    // 'sphere' class inherits from 'hittable' class ("things rays can hit"); done publicly, so outside code can treat 'sphere' as 'hittable'
 public:     // everything after this is accessible and can be written or read from outside the class
-    sphere(const point3& center, double radius) : center(center), radius(std::fmax(0, radius)) {    // ensure radius >= 0; std::fmax() returns maximum of two floats
+    sphere(const point3& center, double radius, shared_ptr<material> mat) : center(center), radius(std::fmax(0, radius)), mat(mat) {    // ensure radius >= 0; std::fmax() returns maximum of two floats
         //TODO: initialize the material pointer 'mat'
     }
         // sphere is constructor function that takes in 3D point for center and floating-point for radius
