@@ -68,8 +68,8 @@ int main() {
 
     auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
     auto material_center = make_shared<lambertian>(color(0.1, 0.2, 0.5));
-    auto material_left   = make_shared<metal>(color(0.8, 0.8, 0.8));
-    auto material_right  = make_shared<metal>(color(0.8, 0.6, 0.2));
+    auto material_left   = make_shared<metal>(color(0.8, 0.8, 0.8), 0.3);   // added fuzziness of 0.3
+    auto material_right  = make_shared<metal>(color(0.8, 0.6, 0.2), 1.0);   // added fuzziness of 1.0
 
     world.add(make_shared<sphere>(point3(0.0, -100.5, -1.0), 100.0, material_ground));  // big sphere used as ground plane (radius=100, top is near y=0)
     world.add(make_shared<sphere>(point3(0.0, 0.0, -1.2), 0.5, material_center));       // small sphere visible at z = -1.2
