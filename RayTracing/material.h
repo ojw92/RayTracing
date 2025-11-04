@@ -65,4 +65,28 @@ private:
 	double fuzz;
 };
 
+class dielectric : public material {	// dielectric material always refracts
+public:
+	dielectric(double refraction_index) : refraction_index(refraction_index) {}
+
+	bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered)	// returns true if a scattered ray is produced, and false if ray is absorbed
+		const override {
+		attenuation = color(1.0, 1.0, 1.0);		// attenuation is set to white; glass doesn't tint the light but just bends it, so the ray passes through unchanged in color
+		double ri = rec.front_face ? (1.0 / refraction_index) : refraction_index;
+			// ri = index ratio; rec.front_face is a bool that tells if the ray is hitting the outside surface (true) or inside the material (false)
+			// : indicates if/else expression
+
+		vec3 unit_direction = unit_vector(r_in.direction());		// normalized direction of incoming ray
+		vec3 refracted = refract(unit_direction, rec.normal, ri);	// refracted direction
+
+		scattered = ray(rec.p, refracted);	// output ray
+		return true;
+	}
+
+private:
+	// Refractive index in vacuum or air, or the ratio of the material's refractive index over
+	// the refractive index of the enclosing media
+	double refraction_index;
+};
+
 #endif
