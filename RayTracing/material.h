@@ -77,9 +77,19 @@ public:
 			// : indicates if/else expression
 
 		vec3 unit_direction = unit_vector(r_in.direction());		// normalized direction of incoming ray
-		vec3 refracted = refract(unit_direction, rec.normal, ri);	// refracted direction
+		// Check for total internal reflection
+		double cos_theta = std::fmin(dot(-unit_direction, rec.normal), 1.0);
+		double sin_theta = std::sqrt(1.0 - cos_theta * cos_theta);
 
-		scattered = ray(rec.p, refracted);	// output ray
+		bool cannot_refract = ri * sin_theta > 1.0;
+		vec3 direction;
+
+		if (cannot_refract)
+			direction = reflect(unit_direction, rec.normal);
+		else
+			direction = refract(unit_direction, rec.normal, ri);
+
+		scattered = ray(rec.p, direction);	// output ray
 		return true;
 	}
 
