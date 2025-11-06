@@ -37,7 +37,8 @@ Rendering Benchmarking Results for 8K Image
   - CPU multithreaded version using `std::thread`
   - GPU-accelerated version using CUDA kernels
   - Anti-aliasing
-  - Diffuse materials and metals
+  - Diffuse materials, metals and dielectrics
+  - Reflection and refraction
 - **Benchmarking framework**
   - Execution time measurements with a custom `Timer`
   - Comparisons across CPU baseline, multithreaded, and GPU executions
@@ -62,8 +63,6 @@ Upcoming features to expand the ray tracer:
 - Sphere intersection  
 - Positionable camera implementation  
 - Diffuse and specular materials  
-- Reflection and refraction  
-- Metal and dielectric surfaces  
 - Defocus blur (depth of field)  
 - Motion blur  
 - Texture mapping  
