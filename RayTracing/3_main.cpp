@@ -68,7 +68,7 @@ int main() {
 
     auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
     auto material_center = make_shared<lambertian>(color(0.1, 0.2, 0.5));
-    auto material_left   = make_shared<dielectric>(1.50);
+    auto material_left   = make_shared<dielectric>(1.00 / 1.33);    // glass/dielectric material's total internal reflection illustrated via emulating world filled with water (index of refraction 1.33), with glass sphere as air bubble (index of refraction of 1.00) 
     auto material_right  = make_shared<metal>(color(0.8, 0.6, 0.2), 1.0);   // added fuzziness of 1.0
 
     world.add(make_shared<sphere>(point3(0.0, -100.5, -1.0), 100.0, material_ground));  // big sphere used as ground plane (radius=100, top is near y=0)

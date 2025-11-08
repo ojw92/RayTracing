@@ -71,7 +71,7 @@ public:
 
 	bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered)	// returns true if a scattered ray is produced, and false if ray is absorbed
 		const override {
-		attenuation = color(1.0, 1.0, 1.0);		// attenuation is set to white; glass doesn't tint the light but just bends it, so the ray passes through unchanged in color
+		attenuation = color(1.0, 1.0, 1.0);		// attenuation is set to 1, or white because glass surface absorbs nothing; glass doesn't tint the light but just bends it, so the ray passes through unchanged in color
 		double ri = rec.front_face ? (1.0 / refraction_index) : refraction_index;
 			// ri = index ratio; rec.front_face is a bool that tells if the ray is hitting the outside surface (true) or inside the material (false)
 			// : indicates if/else expression
