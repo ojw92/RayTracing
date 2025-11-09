@@ -84,9 +84,11 @@ public:
 		bool cannot_refract = ri * sin_theta > 1.0;
 		vec3 direction;
 
-		if (cannot_refract)
+		if (cannot_refract || reflectance(cos_theta, ri) > random_double())
+			// Reflect
 			direction = reflect(unit_direction, rec.normal);
 		else
+			// Refract
 			direction = refract(unit_direction, rec.normal, ri);
 
 		scattered = ray(rec.p, direction);	// output ray
@@ -97,6 +99,15 @@ private:
 	// Refractive index in vacuum or air, or the ratio of the material's refractive index over
 	// the refractive index of the enclosing media
 	double refraction_index;
+
+	static double reflectance(double cosine, double refraction_index) {
+		// Use Schlick's approximation for reflectance.
+		auto r0 = (1 - refraction_index) / (1 + refraction_index);
+		r0 = r0 * r0;											// base reflectivity at normal incidence (when the ray hits straight on)
+		return r0 + (1 - r0) * std::pow((1 - cosine), 5);		// Schlick's approximation
+			// For head-on rays, little reflection
+			// For glancing angle rays, lot of reflection
+	}
 };
 
 #endif
