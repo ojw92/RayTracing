@@ -66,6 +66,15 @@ int main() {
     // World
     hittable_list world;    // collection of 'hittable' objects; its 'hit' loops over all objects, keeping the closest valid hit
 
+    // Adjustable camera test with two touching spheres
+    auto R = std::cos(pi / 4);
+    auto material_left = make_shared<lambertian>(color(0, 0, 1));
+    auto material_right = make_shared<lambertian>(color(1, 0, 0));
+
+    world.add(make_shared<sphere>(point3(-R, 0, -1), R, material_left));
+    world.add(make_shared<sphere>(point3(R, 0, -1), R, material_right));
+
+    /*
     auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
     auto material_center = make_shared<lambertian>(color(0.1, 0.2, 0.5));
     auto material_left   = make_shared<dielectric>(1.50);    // 1.00 / 1.33; glass/dielectric material's total internal reflection illustrated via emulating world filled with water (index of refraction 1.33), with glass sphere as air bubble (index of refraction of 1.00) 
@@ -77,6 +86,7 @@ int main() {
     world.add(make_shared<sphere>(point3(-1.0, 0.0, -1.0), 0.5, material_left));
     world.add(make_shared<sphere>(point3(-1.0, 0.0, -1.0), 0.4, material_bubble));
     world.add(make_shared<sphere>(point3(1.0, 0.0, -1.0), 0.5, material_right));
+    */
 
     // Camera
     camera cam;
@@ -87,6 +97,8 @@ int main() {
     cam.image_width = 400;
     cam.samples_per_pixel = 100;    // set to 100; override default value of 10 in camera.h for slower rendering, but smoother image with less aliasing
     cam.max_depth = 50;
+
+    cam.vfov = 90;
 
     cam.render(world);
 }

@@ -14,6 +14,8 @@ public:
     int    samples_per_pixel = 10;      // count of random samples for each pixel; default value and can be overridden in 3_main.cpp
     int    max_depth         = 10;      // max number of ray bounces into scene  
 
+    double vfov = 90;                   // vertical view angle (field of view)
+
     // Render
     void render(const hittable& world) {
         initialize();
@@ -89,7 +91,9 @@ private:
         // Determine camera's viewport dimensions.
             // auto tells the compiler to deduce the type of a variable from its initializer and allcate the proper amount of memory
         auto focal_length = 1.0;        // distance from camera center to image plane along the -Z (into the image)
-        auto viewport_height = 2.0;
+        auto theta = degrees_to_radians(vfov);
+        auto h = std::tan(theta / 2);
+        auto viewport_height = 2 * h * focal_length;
         auto viewport_width = viewport_height * (double(image_width) / image_height);
             // viewport width calculated by using the "aspect ratio", which may be different from aspect_ratio since image_height might have been safe clamped to a value of 1 instead of negative or fractional value
             // value in aspect_ratio is the ideal value, not the actual ratio between image_width and image_height
