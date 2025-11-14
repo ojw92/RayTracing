@@ -15,6 +15,10 @@ public:
     int    max_depth         = 10;      // max number of ray bounces into scene  
 
     double vfov = 90;                   // vertical view angle (field of view)
+    point3 lookfrom = point3(0, 0, 0);  // point camera is looking from
+    point3 lookat = point3(0, 0, -1);   // point camera is looking at
+    vec3   vup = vec3(0, 1, 0);         // camera-relative "up" direction
+
 
     // Render
     void render(const hittable& world) {
@@ -78,6 +82,7 @@ private:
     point3 pixel00_loc;          // location of pixel 0, 0
     vec3   pixel_delta_u;        // offset to pixel to the right
     vec3   pixel_delta_v;        // offset to pixel below
+    vec3   u, v, w;              // camera frame basis vectors
 
     void initialize() {
         // Calculate the image height, and ensure that it's at least 1
@@ -86,11 +91,11 @@ private:
 
         pixel_samples_scale = 1.0 / samples_per_pixel;
 
-        center = point3(0, 0, 0);
+        center = lookfrom;
 
         // Determine camera's viewport dimensions.
             // auto tells the compiler to deduce the type of a variable from its initializer and allcate the proper amount of memory
-        auto focal_length = 1.0;        // distance from camera center to image plane along the -Z (into the image)
+        auto focal_length = (lookfrom - lookat).length();        // distance from camera center to image plane along the -Z (into the image)
         auto theta = degrees_to_radians(vfov);
         auto h = std::tan(theta / 2);
         auto viewport_height = 2 * h * focal_length;
@@ -98,20 +103,30 @@ private:
             // viewport width calculated by using the "aspect ratio", which may be different from aspect_ratio since image_height might have been safe clamped to a value of 1 instead of negative or fractional value
             // value in aspect_ratio is the ideal value, not the actual ratio between image_width and image_height
 
+        // Calculate the u,v,w unit basis vectors for the camera coordinate frame
+        w = unit_vector(lookfrom - lookat);
+        u = unit_vector(cross(vup, w));
+        v = cross(w, u);
+
         // Calculate the vectors across the horizontal and down the vertical viewport edges
-        auto viewport_u = vec3(viewport_width, 0, 0);       // horizontal axis, increasing to the right
-        auto viewport_v = vec3(0, -viewport_height, 0);     // vertical axis, increasing to the bottom, since image scan is done from top to bottom
+        vec3 viewport_u = viewport_width * u;    // vector across viewport horizontal edge
+        vec3 viewport_v = viewport_height * -v;  // vector down viewport vertical edge
+            //auto viewport_u = vec3(viewport_width, 0, 0);       // horizontal axis, increasing to the right
+            //auto viewport_v = vec3(0, -viewport_height, 0);     // vertical axis, increasing to the bottom, since image scan is done from top to bottom
 
         // Calculate the horizontal and vertical delta vectors from pixel to pixel.
         pixel_delta_u = viewport_u / image_width;
         pixel_delta_v = viewport_v / image_height;
 
         // Calculate the location of the upper left pixel via traversing the 3D space
+        auto viewport_upper_left = center - (focal_length * w) - viewport_u / 2 - viewport_v / 2;
+        /*
         auto viewport_upper_left =
             center                      // start from the camera
             - vec3(0, 0, focal_length)  // move from camera to the center of the view plane into screen
             - viewport_u / 2            // shift left by half viewport width to reach the left edge of the viewport
             - viewport_v / 2;           // shift up (since v is down) by half viewport height to reach the top edge of the viewport
+        */
         pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);     // from upper left corner, move to the center of the top-left pixel (0,0)
     }
 
